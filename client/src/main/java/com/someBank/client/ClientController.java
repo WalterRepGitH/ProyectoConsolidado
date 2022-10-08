@@ -1,6 +1,8 @@
 package com.someBank.client;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,8 +22,19 @@ import reactor.core.publisher.Mono;
 @RequestMapping("/clients")
 public class ClientController {
 	
+
 	@Autowired
 	private IClientService clientService;
+	/*
+    private final KafkaStringProducer kafkaStringProducer;
+
+    @Autowired
+    ClientController(KafkaStringProducer kafkaStringProducer) {
+        this.kafkaStringProducer = kafkaStringProducer;
+    }*/
+	
+	@Autowired
+	private KafkaTemplate<String, Client> producer;
 
 	
 	@DeleteMapping("/{id}")
@@ -42,7 +55,13 @@ public class ClientController {
 	
 	@PutMapping
 	public Mono<Client> update(@RequestBody Client client) {
-		return clientService.update(client);
+		producer.send("bootcamptopic",client);
+		return
+				Mono.just(client)
+				.flatMap(clientTmp -> {
+					return clientService.update(clientTmp);	
+				});
+				
 	}
 
 	@GetMapping("/{id}")
