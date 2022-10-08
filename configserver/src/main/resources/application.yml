@@ -7,10 +7,10 @@ spring:
     config:
       server:
         git:
-          uri: https://github.com/WalterRepGitH/ProyectoFinal.git
+          uri: https://github.com/WalterRepGitH/ProyectoConsolidado.git
           searchPaths: configserverData
           username: WalterRepGitH
-          password: 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
+          password: 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
 
   security:
     user:

@@ -1,6 +1,6 @@
 spring:
   application:
-    name: api-gateway
+    name: registry-service
   cloud:
     config:
       enabled: true
